@@ -8,6 +8,7 @@ import AppLayout from "./pages/AppLayout";
 import Login from "./pages/Login";
 import CityList from "./components/CityList/CityList";
 import { useEffect, useState } from "react";
+import CountryList from "./components/CountryList/CountryList";
 const initialCities = [
   {
     cityName: "Lisbon",
@@ -45,6 +46,18 @@ const initialCities = [
     },
     id: 98443197,
   },
+  {
+    cityName: "Barcelona",
+    country: "Spain",
+    emoji: "ES",
+    date: "2027-03-12T14:22:51.833Z",
+    notes: "Amazing 😃",
+    position: {
+      lat: 52.53586782505711,
+      lng: 13.376933665713324,
+    },
+    id: 93932232,
+  },
 ];
 const App = () => {
   const [cities, setCities] = useState([]);
@@ -69,7 +82,7 @@ const App = () => {
             path="cities"
             element={<CityList cities={cities} isLoading={isLoading} />}
           />
-          <Route path="countries" element={<p>List of Countries</p>} />
+          <Route path="countries" element={<CountryList cities={cities} />} />
           <Route path="form" element={<p>Form</p>} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
