@@ -36,18 +36,6 @@ const initialCities = [
     },
     id: 98443197,
   },
-  {
-    cityName: "Barcelona",
-    country: "Spain",
-    emoji: "ES",
-    date: "2027-03-12T14:22:51.833Z",
-    notes: "Amazing 😃",
-    position: {
-      lat: 52.53586782505711,
-      lng: 13.376933665713324,
-    },
-    id: 93932232,
-  },
 ];
 const initialState = {
   cities: [],
@@ -59,7 +47,7 @@ const CitiesContext = createContext();
 const CitiesProvider = ({ children }) => {
   const [cities, setCities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentCity, setCurrentCity] = useState({});
+  const [currentCity, setCurrentCity] = useState(initialCities[0]);
   useEffect(() => {
     setCities(initialCities);
     setIsLoading(false);
