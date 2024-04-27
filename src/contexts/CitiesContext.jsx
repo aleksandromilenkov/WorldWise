@@ -59,16 +59,29 @@ const CitiesContext = createContext();
 const CitiesProvider = ({ children }) => {
   const [cities, setCities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentCity, setCurrentCity] = useState({});
   useEffect(() => {
     setCities(initialCities);
     setIsLoading(false);
   }, []);
+
+  const setCurrentCityHandler = (id) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const fetchedCity = cities.filter((city) => city.id === +id);
+      setCurrentCity(fetchedCity[0]);
+
+      setIsLoading(false);
+    }, 300);
+  };
 
   return (
     <CitiesContext.Provider
       value={{
         cities: cities,
         isLoading: isLoading,
+        currentCity: currentCity,
+        setCurrentCity: setCurrentCityHandler,
       }}
     >
       {children}
