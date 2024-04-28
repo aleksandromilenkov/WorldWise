@@ -13,22 +13,23 @@ import { useCities } from "../../contexts/CitiesContext";
 import { map } from "leaflet";
 import { useGeolocation } from "../../hooks/useGeolocation";
 import Button from "../Button/Button";
+import { useUrlPosition } from "../../hooks/useUrlPosition";
 const Map = () => {
   const { cities } = useCities();
   const [mapPosition, setMapPosition] = useState([41, 23]);
-  const [searchParams, setSearchParams] = useSearchParams();
   const {
     isLoading: isLoadingPosition,
     position: geolocationPosition,
     error: geolocationError,
     getPosition,
   } = useGeolocation();
-  const lat = searchParams.get("lat");
-  const lng = searchParams.get("lng");
+
+  const { lat, lng } = useUrlPosition();
   useEffect(() => {
     if (geolocationPosition)
       setMapPosition([geolocationPosition?.lat, geolocationPosition?.lng]);
-  }, [geolocationPosition, setSearchParams]);
+  }, [geolocationPosition]);
+
   useEffect(() => {
     if (lat && lng) {
       setMapPosition([lat, lng]);
