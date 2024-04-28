@@ -63,6 +63,14 @@ const CitiesProvider = ({ children }) => {
     }, 300);
   };
 
+  const addNewCityHandler = async (city) => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setCities((prevState) => [...prevState, city]);
+      setIsLoading(false);
+    }, 300);
+  };
+
   return (
     <CitiesContext.Provider
       value={{
@@ -70,6 +78,7 @@ const CitiesProvider = ({ children }) => {
         isLoading: isLoading,
         currentCity: currentCity,
         setCurrentCity: setCurrentCityHandler,
+        addNewCity: addNewCityHandler,
       }}
     >
       {children}
