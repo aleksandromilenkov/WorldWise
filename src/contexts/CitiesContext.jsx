@@ -71,6 +71,10 @@ const CitiesProvider = ({ children }) => {
     }, 300);
   };
 
+  const deleteCityHandler = (cityId) => {
+    setCities((prevState) => prevState.filter((city) => city.id !== cityId));
+  };
+
   return (
     <CitiesContext.Provider
       value={{
@@ -79,6 +83,7 @@ const CitiesProvider = ({ children }) => {
         currentCity: currentCity,
         setCurrentCity: setCurrentCityHandler,
         addNewCity: addNewCityHandler,
+        deleteCity: deleteCityHandler,
       }}
     >
       {children}
