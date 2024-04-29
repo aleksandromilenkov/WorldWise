@@ -1,8 +1,11 @@
 // Uses the same styles as Product
 import PageNav from "../components/PageNav/PageNav";
+import { useAuth } from "../contexts/AuthProvider";
 import styles from "./Product.module.css";
 
 export default function Product() {
+  const { isAuthenticated } = useAuth();
+  console.log(isAuthenticated);
   return (
     <main className={styles.product}>
       <PageNav />
