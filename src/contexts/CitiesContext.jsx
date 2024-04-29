@@ -1,4 +1,10 @@
-import { createContext, useState, useEffect, useContext } from "react";
+import {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  useReducer,
+} from "react";
 const initialCities = [
   {
     cityName: "Lisbon",
@@ -39,40 +45,83 @@ const initialCities = [
 ];
 const initialState = {
   cities: [],
-  isLoading: Boolean,
+  isLoading: false,
+  currentCity: {},
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "loading":
+      return {
+        ...state,
+        isLoading: action.payload,
+      };
+    case "setCurrentCity":
+      return {
+        ...state,
+        isLoading: false,
+        currentCity: action.payload,
+      };
+    case "cities/loaded":
+      return {
+        ...state,
+        isLoading: false,
+        cities: action.payload,
+      };
+    case "city/created":
+      return {
+        ...state,
+        isLoading: false,
+        cities: [...state.cities, action.payload],
+        currentCity: action.payload,
+      };
+
+    case "city/deleted":
+      return {
+        ...state,
+        isLoading: false,
+        cities: state.cities.filter((city) => city.id !== action.payload),
+        currentCity: {},
+      };
+    default:
+      return state;
+  }
 };
 
 const CitiesContext = createContext();
 
 const CitiesProvider = ({ children }) => {
-  const [cities, setCities] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentCity, setCurrentCity] = useState(initialCities[0]);
+  const [{ cities, isLoading, currentCity }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
+  //   const [cities, setCities] = useState([]);
+  //   const [isLoading, setIsLoading] = useState(true);
+  //   const [currentCity, setCurrentCity] = useState(initialCities[0]);
   useEffect(() => {
-    setCities(initialCities);
-    setIsLoading(false);
+    dispatch({ type: "loading", payload: true });
+    dispatch({ type: "cities/loaded", payload: initialCities });
   }, []);
 
   const setCurrentCityHandler = (id) => {
-    setIsLoading(true);
+    if (currentCity.id === +id) return;
+    dispatch({ type: "loading", payload: true });
     setTimeout(() => {
       const fetchedCity = cities.filter((city) => city.id === +id);
-      setCurrentCity(fetchedCity[0]);
-
-      setIsLoading(false);
+      dispatch({ type: "setCurrentCity", payload: fetchedCity[0] });
     }, 300);
   };
 
   const addNewCityHandler = async (city) => {
-    setIsLoading(true);
+    dispatch({ type: "loading", payload: true });
     setTimeout(() => {
-      setCities((prevState) => [...prevState, city]);
-      setIsLoading(false);
+      dispatch({ type: "city/created", payload: city });
     }, 300);
   };
 
   const deleteCityHandler = (cityId) => {
-    setCities((prevState) => prevState.filter((city) => city.id !== cityId));
+    console.log("deletingcity");
+    dispatch({ type: "city/deleted", payload: cityId });
   };
 
   return (
