@@ -4,6 +4,7 @@ import {
   useEffect,
   useContext,
   useReducer,
+  useCallback,
 } from "react";
 const initialCities = [
   {
@@ -103,14 +104,17 @@ const CitiesProvider = ({ children }) => {
     dispatch({ type: "cities/loaded", payload: initialCities });
   }, []);
 
-  const setCurrentCityHandler = (id) => {
-    if (currentCity.id === +id) return;
-    dispatch({ type: "loading", payload: true });
-    setTimeout(() => {
-      const fetchedCity = cities.filter((city) => city.id === +id);
-      dispatch({ type: "setCurrentCity", payload: fetchedCity[0] });
-    }, 300);
-  };
+  const setCurrentCityHandler = useCallback(
+    (id) => {
+      if (currentCity.id === +id) return;
+      dispatch({ type: "loading", payload: true });
+      setTimeout(() => {
+        const fetchedCity = cities.filter((city) => city.id === +id);
+        dispatch({ type: "setCurrentCity", payload: fetchedCity[0] });
+      }, 300);
+    },
+    [currentCity, cities]
+  );
 
   const addNewCityHandler = async (city) => {
     dispatch({ type: "loading", payload: true });
